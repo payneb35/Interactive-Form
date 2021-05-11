@@ -30,3 +30,15 @@ shirtDesigns.addEventListener('change', () => {
     }
 });
 
+const activitiesBox = document.querySelector('#activities-box')
+const activitiesBoxCheckboxes = document.querySelectorAll('#activities-box label input');
+const totalCost = document.querySelector('.activities-cost');
+activitiesBox.addEventListener('change', (e) => {
+    let cost = 0;
+    for (let i = 0; i < activitiesBoxCheckboxes.length; i++) {
+        if (activitiesBoxCheckboxes[i].checked) {
+            cost += parseInt(activitiesBoxCheckboxes[i].getAttribute('data-cost'));
+        }
+    }
+    totalCost.textContent = `Total: $${cost}`;
+});
