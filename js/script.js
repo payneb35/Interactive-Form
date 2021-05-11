@@ -67,3 +67,59 @@ paymentOptions.addEventListener('change', () => {
         bitcoin.hidden = false;
     }
 });
+
+// function checkName() {
+//     const nameInput = document.querySelector('#name');
+//     const nameRegEx = /^[a-zA-Z]+$/;
+//     let validName;
+//     nameInput.addEventListener('input', () => {
+//         validName = nameRegEx.test(nameInput.value);
+//     });
+//     if (validName) {
+//         console.log("it's valid");
+//     }
+// }
+
+// checkName();
+
+const nameInput = document.querySelector('#name');
+const nameRegEx = /^[a-z]+$/i;
+let isValidName;
+
+nameInput.addEventListener('input', checkName);
+
+function checkName() {
+    isValidName = nameRegEx.test(nameInput.value);
+    if (!isValidName) {
+        alert(`The Name field is invalid.`); 
+        alert(`You can only use letters, and it must not be empty`);
+    }
+    return isValidName;
+}
+
+const emailInput = document.querySelector('#email');
+const emailRegEx = /^[^@]+@[^@.]+\.com$/i;
+let isValidEmail;
+
+emailInput.addEventListener('input', checkEmail);
+
+function checkEmail() {
+    isValidEmail = emailRegEx.test(emailInput.value);
+    if (!isValidEmail) {
+        // alert(`The Email field is invalid`);
+        // alert(`It must be in the ****@****.com format`);
+    }
+    return isValidEmail;
+}
+
+const form = document.querySelector('form');
+
+form.addEventListener('submit', (e) => {
+    if(checkName() && checkEmail()) {
+        console.log('So far we is good');
+    } else {
+        console.log('not today buddy');
+    }
+    e.preventDefault();
+
+});
