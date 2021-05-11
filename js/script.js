@@ -9,7 +9,16 @@ const activitiesBox = document.querySelector('.activities')
 const activitiesBoxCheckboxes = document.querySelectorAll('#activities-box label input');
 const totalCost = document.querySelector('.activities-cost');
 
+const creditCard = document.querySelector('.credit-card');
+const paypal = document.querySelector('.paypal');
+const bitcoin = document.querySelector('.bitcoin');
+const paymentOptions = document.querySelector('#payment');
+
 name.focus();
+
+paymentOptions.value = 'credit-card';
+paypal.hidden = true;
+bitcoin.hidden = true;
 
 document.addEventListener('DOMContentLoaded', () => {
     const jobRole = document.querySelector('#title');
@@ -42,4 +51,19 @@ activitiesBox.addEventListener('change', (e) => {
         }
     }
     totalCost.textContent = `Total: $${cost}`;
+});
+
+paymentOptions.addEventListener('change', () => {
+    creditCard.hidden = true;
+    paypal.hidden = true;
+    bitcoin.hidden = true;
+    if (paymentOptions.value === 'credit-card') {
+        creditCard.hidden = false;
+    }
+    if (paymentOptions.value === 'paypal') {
+        paypal.hidden = false;
+    }
+    if (paymentOptions.value === 'bitcoin') {
+        bitcoin.hidden = false;
+    }
 });
