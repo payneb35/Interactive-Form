@@ -49,6 +49,21 @@ activitiesBox.addEventListener('change', (e) => {
         if (activitiesBoxCheckboxes[i].checked) {
             cost += parseInt(activitiesBoxCheckboxes[i].getAttribute('data-cost'));
         }
+        for (let j = 0; j < activitiesBoxCheckboxes.length; j++) {
+            const firstTime = activitiesBoxCheckboxes[i].getAttribute('data-day-and-time');
+            const secondTime = activitiesBoxCheckboxes[j].getAttribute('data-day-and-time');
+            if (activitiesBoxCheckboxes[i].checked) {
+                if (firstTime && secondTime && firstTime === secondTime && i != j) {
+                    activitiesBoxCheckboxes[j].disabled = true;
+                    activitiesBoxCheckboxes[j].parentElement.classList.add('disabled');
+                }
+            } else {
+                if (firstTime && secondTime && firstTime === secondTime && i != j) {
+                    activitiesBoxCheckboxes[j].disabled = false;
+                    activitiesBoxCheckboxes[j].parentElement.classList.remove('disabled');
+                }
+            }
+        }
     }
     totalCost.textContent = `Total: $${cost}`;
     checkActivities();
@@ -70,14 +85,18 @@ paymentOptions.addEventListener('change', () => {
 });
 
 const nameInput = document.querySelector('#name');
-//let isValidName;
-
 nameInput.addEventListener('input', checkName);
 
 function checkName() {
     const isValidName = /^[a-z]+$/i.test(nameInput.value);
     if (!isValidName) {
         makeInvalid(nameInput.parentElement);
+        const errorMessage = document.querySelector('span.hint');
+        if (/\d/.test(nameInput.value)) {
+            errorMessage.textContent = "Name field cannot include numbers";
+        } else {
+            errorMessage.textContent = "Name field cannot be blank";
+        }
     } else {
         makeValid(nameInput.parentElement);
     }
@@ -85,7 +104,6 @@ function checkName() {
 }
 
 const emailInput = document.querySelector('#email');
-//let isValidEmail;
 emailInput.addEventListener('input', checkEmail);
 
 function checkEmail() {
@@ -115,7 +133,6 @@ function checkActivities() {
 }
 
 const cardNumberInput = document.querySelector('#cc-num');
-//let isValidCardNumber;
 cardNumberInput.addEventListener('input', checkCardNumber);
 
 function checkCardNumber() {
@@ -129,7 +146,6 @@ function checkCardNumber() {
 }
 
 const zipNumberInput = document.querySelector('#zip');
-//let isValidZipNumber;
 zipNumberInput.addEventListener('input', checkZipNumber);
 
 function checkZipNumber() {
@@ -143,7 +159,6 @@ function checkZipNumber() {
 }
 
 const cvvNumberInput = document.querySelector('#cvv');
-//let isValidCvvNumber;
 cvvNumberInput.addEventListener('input', checkCvvNumber);
 
 function checkCvvNumber() {
