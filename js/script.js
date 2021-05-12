@@ -68,20 +68,6 @@ paymentOptions.addEventListener('change', () => {
     }
 });
 
-// function checkName() {
-//     const nameInput = document.querySelector('#name');
-//     const nameRegEx = /^[a-zA-Z]+$/;
-//     let validName;
-//     nameInput.addEventListener('input', () => {
-//         validName = nameRegEx.test(nameInput.value);
-//     });
-//     if (validName) {
-//         console.log("it's valid");
-//     }
-// }
-
-// checkName();
-
 const nameInput = document.querySelector('#name');
 const nameRegEx = /^[a-z]+$/i;
 let isValidName;
@@ -91,8 +77,8 @@ nameInput.addEventListener('input', checkName);
 function checkName() {
     isValidName = nameRegEx.test(nameInput.value);
     if (!isValidName) {
-        alert(`The Name field is invalid.`); 
-        alert(`You can only use letters, and it must not be empty`);
+        //alert(`The Name field is invalid.`); 
+        //alert(`You can only use letters, and it must not be empty`);
     }
     return isValidName;
 }
@@ -112,14 +98,100 @@ function checkEmail() {
     return isValidEmail;
 }
 
+function checkActivities() {
+    let isActivityChecked = [];
+    for (let i = 0; i < activitiesBoxCheckboxes.length; i++) {
+        if (activitiesBoxCheckboxes[i].checked) {
+            isActivityChecked.push(true);
+        }
+    }
+    if (isActivityChecked.includes(true)) {
+        return true;
+    } else {
+        //alert("You haven't selected any activities");
+        return false;
+    }
+}
+
+const cardNumberInput = document.querySelector('#cc-num');
+const cardNumberRegEx = /^\d{13,16}$/;
+let isValidCardNumber;
+
+cardNumberInput.addEventListener('input', checkCardNumber);
+
+function checkCardNumber() {
+    isValidCardNumber = cardNumberRegEx.test(cardNumberInput.value);
+    //if (!isValidCardNumber)
+    return isValidCardNumber;
+}
+
+const zipNumberInput = document.querySelector('#zip');
+const zipNumberRegEx = /^\d{5}$/;
+let isValidZipNumber;
+
+zipNumberInput.addEventListener('input', checkZipNumber);
+
+function checkZipNumber() {
+    isValidZipNumber = zipNumberRegEx.test(zipNumberInput.value);
+    //if (!isValidCardNumber)
+    return isValidZipNumber;
+}
+
+const cvvNumberInput = document.querySelector('#cvv');
+const cvvNumberRegEx = /^\d{3,4}$/;
+let isValidCvvNumber;
+
+cvvNumberInput.addEventListener('input', checkCvvNumber);
+
+function checkCvvNumber(e) {
+    isValidCvvNumber = cvvNumberRegEx.test(cvvNumberInput.value);
+    if (!isValidCardNumber) {
+        cvvNumberInput.classList.add('not-valid');
+        console.log("Please enter a valid CVV");
+        e.preventDefault();
+    } else {
+        cvvNumberInput.classList.remove('not-valid');
+    }
+    return isValidCvvNumber;
+}
+
 const form = document.querySelector('form');
 
 form.addEventListener('submit', (e) => {
-    if(checkName() && checkEmail()) {
-        console.log('So far we is good');
+    if (!checkName()) {
+        console.log("Please enter a valid name");
+        e.preventDefault();
+    } else if (!checkEmail()) {
+        console.log("Please enter a valid email");
+        e.preventDefault();
+    } else if (!checkActivities()) {
+        console.log("Please check an activity");
+        e.preventDefault();
+    } else if (paymentOptions.value === 'credit-card') {
+        if (!checkCardNumber()) {
+            console.log("Please enter a valid credit card number");
+            e.preventDefault();
+        } else if (!checkZipNumber()) {
+            console.log("Please enter a valid zip code");
+            e.preventDefault();
+        } else if (!checkCvvNumber()) {
+            console.log("Please enter a valid CVV");
+            e.preventDefault();
+        } 
     } else {
-        console.log('not today buddy');
+        alert("Form submitted!!");
     }
-    e.preventDefault();
 
+    //e.preventDefault();
 });
+
+for (let i = 0; i < activitiesBoxCheckboxes.length; i++) {
+    activitiesBoxCheckboxes[i].addEventListener('focus', (e) => {
+        const focusLabel = e.target.parentElement;
+        focusLabel.classList.add('focus');
+    });
+    activitiesBoxCheckboxes[i].addEventListener('blur', (e) => {
+        const focusLabel = e.target.parentElement;
+        focusLabel.classList.remove('focus');
+    });
+}
