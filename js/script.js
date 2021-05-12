@@ -51,6 +51,7 @@ activitiesBox.addEventListener('change', (e) => {
         }
     }
     totalCost.textContent = `Total: $${cost}`;
+    checkActivities();
 });
 
 paymentOptions.addEventListener('change', () => {
@@ -69,31 +70,30 @@ paymentOptions.addEventListener('change', () => {
 });
 
 const nameInput = document.querySelector('#name');
-const nameRegEx = /^[a-z]+$/i;
-let isValidName;
+//let isValidName;
 
 nameInput.addEventListener('input', checkName);
 
 function checkName() {
-    isValidName = nameRegEx.test(nameInput.value);
+    const isValidName = /^[a-z]+$/i.test(nameInput.value);
     if (!isValidName) {
-        //alert(`The Name field is invalid.`); 
-        //alert(`You can only use letters, and it must not be empty`);
+        makeInvalid(nameInput.parentElement);
+    } else {
+        makeValid(nameInput.parentElement);
     }
     return isValidName;
 }
 
 const emailInput = document.querySelector('#email');
-const emailRegEx = /^[^@]+@[^@.]+\.com$/i;
-let isValidEmail;
-
+//let isValidEmail;
 emailInput.addEventListener('input', checkEmail);
 
 function checkEmail() {
-    isValidEmail = emailRegEx.test(emailInput.value);
+    const isValidEmail = /^[^@]+@[^@.]+\.com$/i.test(emailInput.value);
     if (!isValidEmail) {
-        // alert(`The Email field is invalid`);
-        // alert(`It must be in the ****@****.com format`);
+        makeInvalid(emailInput.parentElement);
+    } else {
+        makeValid(emailInput.parentElement);
     }
     return isValidEmail;
 }
@@ -106,83 +106,67 @@ function checkActivities() {
         }
     }
     if (isActivityChecked.includes(true)) {
+        makeValid(activitiesBox);
         return true;
     } else {
-        //alert("You haven't selected any activities");
+        makeInvalid(activitiesBox);
         return false;
     }
 }
 
 const cardNumberInput = document.querySelector('#cc-num');
-const cardNumberRegEx = /^\d{13,16}$/;
-let isValidCardNumber;
-
+//let isValidCardNumber;
 cardNumberInput.addEventListener('input', checkCardNumber);
 
 function checkCardNumber() {
-    isValidCardNumber = cardNumberRegEx.test(cardNumberInput.value);
-    //if (!isValidCardNumber)
+    const isValidCardNumber = /^\d{13,16}$/.test(cardNumberInput.value);
+    if (!isValidCardNumber) {
+        makeInvalid(cardNumberInput.parentElement);
+    } else {
+        makeValid(cardNumberInput.parentElement);
+    }
     return isValidCardNumber;
 }
 
 const zipNumberInput = document.querySelector('#zip');
-const zipNumberRegEx = /^\d{5}$/;
-let isValidZipNumber;
-
+//let isValidZipNumber;
 zipNumberInput.addEventListener('input', checkZipNumber);
 
 function checkZipNumber() {
-    isValidZipNumber = zipNumberRegEx.test(zipNumberInput.value);
-    //if (!isValidCardNumber)
+    const isValidZipNumber = /^\d{5}$/.test(zipNumberInput.value);
+    if (!isValidZipNumber) {
+        makeInvalid(zipNumberInput.parentElement);
+    } else {
+        makeValid(zipNumberInput.parentElement);
+    }
     return isValidZipNumber;
 }
 
 const cvvNumberInput = document.querySelector('#cvv');
-const cvvNumberRegEx = /^\d{3,4}$/;
-let isValidCvvNumber;
-
+//let isValidCvvNumber;
 cvvNumberInput.addEventListener('input', checkCvvNumber);
 
-function checkCvvNumber(e) {
-    isValidCvvNumber = cvvNumberRegEx.test(cvvNumberInput.value);
-    if (!isValidCardNumber) {
-        cvvNumberInput.classList.add('not-valid');
-        console.log("Please enter a valid CVV");
-        e.preventDefault();
+function checkCvvNumber() {
+    const isValidCvvNumber = /^\d{3,4}$/.test(cvvNumberInput.value);
+    if (!isValidCvvNumber) {
+        makeInvalid(cvvNumberInput.parentElement);
     } else {
-        cvvNumberInput.classList.remove('not-valid');
+        makeValid(cvvNumberInput.parentElement);
     }
     return isValidCvvNumber;
 }
 
 const form = document.querySelector('form');
 
-form.addEventListener('submit', (e) => {
-    if (!checkName()) {
-        console.log("Please enter a valid name");
-        e.preventDefault();
-    } else if (!checkEmail()) {
-        console.log("Please enter a valid email");
-        e.preventDefault();
-    } else if (!checkActivities()) {
-        console.log("Please check an activity");
-        e.preventDefault();
-    } else if (paymentOptions.value === 'credit-card') {
-        if (!checkCardNumber()) {
-            console.log("Please enter a valid credit card number");
-            e.preventDefault();
-        } else if (!checkZipNumber()) {
-            console.log("Please enter a valid zip code");
-            e.preventDefault();
-        } else if (!checkCvvNumber()) {
-            console.log("Please enter a valid CVV");
-            e.preventDefault();
-        } 
-    } else {
-        alert("Form submitted!!");
+form.addEventListener('submit', () => {
+    checkName();
+    checkEmail();
+    checkActivities();
+    if (paymentOptions.value === 'credit-card') {
+        checkCardNumber();
+        checkZipNumber();
+        checkCvvNumber();
     }
-
-    //e.preventDefault();
 });
 
 for (let i = 0; i < activitiesBoxCheckboxes.length; i++) {
@@ -194,4 +178,17 @@ for (let i = 0; i < activitiesBoxCheckboxes.length; i++) {
         const focusLabel = e.target.parentElement;
         focusLabel.classList.remove('focus');
     });
+}
+
+function makeValid(element) {
+    element.classList.remove('not-valid');
+    element.lastElementChild.style.display = 'none';
+    element.classList.add('valid');
+}
+
+function makeInvalid(element) {
+    element.classList.add('not-valid');
+    element.lastElementChild.style.display = 'flex';
+    element.classList.remove('valid');
+    event.preventDefault();
 }
