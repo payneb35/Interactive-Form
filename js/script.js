@@ -3,7 +3,9 @@ const name = document.querySelector('input#name');
 const otherJobRole = document.querySelector('input.other-job-role');
 const jobRole = document.querySelector('#title');
 const shirtColors = document.querySelector('.shirt-colors');
+let selectedShirtColor = document.querySelector('#color');
 const shirtDesigns = document.querySelector('#design');
+const listedShirtColors = document.querySelectorAll('#color option');
 const activitiesBox = document.querySelector('.activities')
 const activitiesBoxCheckboxes = document.querySelectorAll('#activities-box label input');
 const totalCost = document.querySelector('.activities-cost');
@@ -17,6 +19,7 @@ const cardNumberInput = document.querySelector('#cc-num');
 const zipNumberInput = document.querySelector('#zip');
 const cvvNumberInput = document.querySelector('#cvv');
 const form = document.querySelector('form');
+let firstNotValid;
 
 //Focusing on the name input when page loads
 name.focus();
@@ -39,7 +42,7 @@ jobRole.addEventListener('change', (event) => {
 //Show only color options available for selected design
 shirtDesigns.addEventListener('change', () => {
     shirtColors.style.display = 'block';
-    const listedShirtColors = document.querySelectorAll('#color option');
+    selectedShirtColor.selectedIndex = '0';
     for (let i = 0; i < listedShirtColors.length; i++) {
         listedShirtColors[i].hidden = true;
         if (listedShirtColors[i].getAttribute('data-theme') == shirtDesigns.value) {
@@ -132,8 +135,10 @@ function checkName() {
         const errorMessage = document.querySelector('span.hint');
         if (/\d/.test(nameInput.value)) {
             errorMessage.textContent = "Name field cannot include numbers";
-        } else {
+        } else if (/^$/.test(nameInput.value)) {
             errorMessage.textContent = "Name field cannot be blank";
+        } else {
+            errorMessage.textContent = "Name field must only contain letters"
         }
     } else {
         makeValid(nameInput.parentElement);
@@ -215,4 +220,6 @@ function makeInvalid(element) {
     element.lastElementChild.style.display = 'flex';
     element.classList.remove('valid');
     event.preventDefault();
+    firstNotValid = document.querySelector('.not-valid');
+    firstNotValid.focus();
 }
