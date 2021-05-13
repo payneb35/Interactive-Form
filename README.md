@@ -14,7 +14,7 @@ The payment info section display only relevant information to their selected pay
 
 The form uses validation, so that it cannot be submitted unless all required fields have valid input.  If the required fields are valid, they are styled to look valid.  If the required fields are invalid, they are styled so that the user can easily tell they are invalid.  They also will display a hint to help correct the mistake.
 
-The required fields are validated on input as well as upon submitting the form.
+The required fields are validated on input as well as upon submitting the form.  If there are any invalid fields, the form will not submit and it will focus on the first invalid field.
 
 The form uses real-time error messages to help the user understand why their input is not valid.  The error messages will disappear if their input is valid.  The form uses these real-time error messages for all required fields.
 
